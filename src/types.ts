@@ -3,6 +3,11 @@ export const ADD_PRODUCT = 'ADD_PRODUCT'
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 export const TOGGLE_DIALOG = 'TOGGLE_DIALOG'
 
+export type MessageItem = {
+  id: string
+  body: string
+}
+
 // Enum
 export enum DialogType {
   SignIn = 'signIn',
