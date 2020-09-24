@@ -3,9 +3,37 @@ export const ADD_PRODUCT = 'ADD_PRODUCT'
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
 export const TOGGLE_DIALOG = 'TOGGLE_DIALOG'
 
-export type MessageItem = {
+export const CHANGE_ROOM = 'CHANGE_ROOM'
+export const APPEND_NEW_MESSAGE = 'APPEND_NEW_MESSAGE'
+
+export type ChangeRoomAction = {
+  type: typeof CHANGE_ROOM
+  payload: RoomModel
+}
+
+export type AppendNewMessageAction = {
+  type: typeof APPEND_NEW_MESSAGE
+  payload: MessageInRoom
+}
+
+export type RoomActions = ChangeRoomAction | AppendNewMessageAction
+
+export type UserInRoom = {
+  id: string
+  name: string
+}
+export type MessageInRoom = {
   id: string
   body: string
+  roomId: string
+  userId: string
+  createdAt?: string
+}
+
+export type RoomModel = {
+  id: string
+  users: UserInRoom[]
+  messages: MessageInRoom[]
 }
 
 // Enum
@@ -61,4 +89,5 @@ export type UiState = {
 export type AppState = {
   product: ProductState
   ui: UiState
+  room: RoomModel
 }

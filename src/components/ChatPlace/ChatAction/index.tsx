@@ -17,20 +17,26 @@ const useStyles = makeStyles(() =>
     },
   })
 )
-type Props = {}
+type Props = {
+  roomId: string
+}
 
-const chatroom = '12345'
-const ChatAction: FC<Props> = () => {
-  const [message, setMessage] = useState()
-
+const ChatAction: FC<Props> = ({ roomId }) => {
+  const classes = useStyles()
+  const [message, setMessage] = useState('')
   const handleSubmit = async (e?: any) => {
     e && e.preventDefault()
-    console.log('sent', message)
     if (message.trim()) {
-      socket.emit('client-send-message', { room: chatroom, body: message })
+      socket.emit(
+        'client-send-message',
+        { roomId: roomId, body: message },
+        () => {
+          console.log('sent')
+          setMessage('')
+        }
+      )
     }
   }
-  const classes = useStyles()
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -42,6 +48,7 @@ const ChatAction: FC<Props> = () => {
       <TextField
         size="small"
         variant="outlined"
+        value={message}
         className={classes.textField}
         onChange={handleChange}
       />

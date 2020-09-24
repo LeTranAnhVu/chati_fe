@@ -2,10 +2,8 @@ import React, { FC } from 'react'
 import ChatItem from './ChatItem'
 import { createStyles, Paper } from '@material-ui/core'
 
-import faker from 'faker'
-import { MessageItem } from '../../../types'
+import { RoomModel, UserInRoom } from '../../../types'
 import { makeStyles } from '@material-ui/core/styles'
-import socket from '../../../services/socket'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,26 +17,29 @@ const useStyles = makeStyles(() =>
   })
 )
 
-type Props = {}
-
-let conversations: MessageItem[] = []
-
-for (let i = 1; i <= 30; i++) {
-  conversations.push({
-    id: faker.random.uuid(),
-    body: faker.lorem.sentence(),
-  })
+type Props = {
+  room: RoomModel
 }
 
-const ChatBox: FC<Props> = () => {
+const defaultUser = {
+  name: 'unknown',
+  id: '00000',
+}
+
+const ChatBox: FC<Props> = ({ room }) => {
   const classes = useStyles()
-  socket.on('server-send-message', (data: any) => {
-    console.log('<<<<', data)
-  })
+
+  const lookupUser = (userId: string): UserInRoom | undefined =>
+    room.users.find((user) => user.id === userId)
+
   return (
     <Paper className={classes.root}>
-      {conversations.map((conv) => (
-        <ChatItem key={conv.id} item={conv} />
+      {room.messages.map((message) => (
+        <ChatItem
+          key={message.id}
+          message={message}
+          user={lookupUser(message.userId) || defaultUser}
+        />
       ))}
     </Paper>
   )

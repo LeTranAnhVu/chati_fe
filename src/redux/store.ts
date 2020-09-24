@@ -13,6 +13,11 @@ const initState: AppState = {
   ui: {
     dialogOpen: {},
   },
+  room: {
+    id: '',
+    users: [],
+    messages: [],
+  },
 }
 
 export default function makeStore(initialState = initState) {

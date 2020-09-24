@@ -3,7 +3,10 @@ import { Grid, Paper } from '@material-ui/core'
 import FriendList from '../components/FriendList'
 import ChatPlace from '../components/ChatPlace'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { joinRoom } from '../services/socket'
+import { useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { appendNewMessage, fetchRoom } from '../redux/actions/room'
+import socket from '../services/socket'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,13 +21,19 @@ const useStyles = makeStyles(() =>
 
 type Props = {}
 
-export const roomName = '12345'
-
 const Room: FC<Props> = () => {
+  const dispatch = useDispatch()
   const classes = useStyles()
+  const { id: roomId } = useParams()
+
   useEffect(() => {
-    joinRoom(roomName)
-  }, [])
+    // fetch room
+    dispatch(fetchRoom(roomId))
+  }, [dispatch, roomId])
+
+  socket.on('server-send-message', (data: any) => {
+    dispatch(appendNewMessage(data))
+  })
 
   return (
     <Grid container className={classes.root}>
