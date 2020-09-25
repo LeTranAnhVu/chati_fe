@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
+import { SOCKET_URL } from './index'
 
-const socket = io('http://localhost:5000/chat?token=brianle')
+const socket = io(SOCKET_URL)
 
 socket.on('connect', () => {
   console.log('connected to socket')

@@ -2,11 +2,11 @@ import {
   APPEND_NEW_MESSAGE,
   AppendNewMessageAction,
   CHANGE_ROOM,
-  ChangeRoomAction,
   MessageInRoom,
-  RoomModel,
 } from '../../types'
-import faker from 'faker'
+import { Dispatch } from 'redux'
+
+import roomService from '../../services/room'
 
 export const appendNewMessage = (
   newMessage: MessageInRoom
@@ -17,32 +17,14 @@ export const appendNewMessage = (
   }
 }
 
-export const fetchRoom = (roomId: string): ChangeRoomAction => {
-  const room: RoomModel = {
-    id: '12345',
-    users: [
-      {
-        id: '1',
-        name: 'brian',
-      },
-      {
-        id: '2',
-        name: 'tram',
-      },
-    ],
-    messages: [],
-  }
-  for (let i = 1; i <= 3; i++) {
-    room.messages.push({
-      id: faker.random.uuid(),
-      body: faker.lorem.sentence(),
-      roomId: '1',
-      userId: Math.round(Math.random()) ? '1' : '2',
+export const fetchRoom = (roomId: string) => async (dispatch: Dispatch) => {
+  try {
+    const room = await roomService.fetchOne(roomId)
+    dispatch({
+      type: CHANGE_ROOM,
+      payload: room,
     })
-  }
-
-  return {
-    type: CHANGE_ROOM,
-    payload: room,
+  } catch (e) {
+    return null
   }
 }
