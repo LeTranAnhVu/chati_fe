@@ -1,18 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { Router } from 'react-router-dom'
 
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import makeStore from './redux/store'
+import history from './utils/history'
 
-const store = makeStore()
+export const store = makeStore()
 
 const WithProvider = () => (
   <Provider store={store}>
-    <Router>
+    <Router history={history}>
       <App />
     </Router>
   </Provider>
