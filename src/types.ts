@@ -1,3 +1,5 @@
+export const ACCESS_TOKEN = 'ACCESS_TOKEN'
+
 // Action types
 export const ADD_PRODUCT = 'ADD_PRODUCT'
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
@@ -90,4 +92,53 @@ export type AppState = {
   product: ProductState
   ui: UiState
   room: RoomModel
+  currentUser: CurrentUserState
 }
+
+//----------------------CURRENT_USER---------------------------
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'LOGIN_FAIL'
+
+export const LOG_OUT = 'LOG_OUT'
+
+export type LoginStatus = 'guest' | 'logging' | 'logged' | 'fail'
+
+export type CurrentUser = {
+  email?: string
+  firstName?: string
+  lastName?: string
+  id?: string
+  googleId?: string
+  avatar?: string
+}
+
+export type CurrentUserState = CurrentUser & {
+  loginStatus: LoginStatus
+}
+
+export type LoginRequestAction = {
+  type: typeof LOGIN_REQUEST
+}
+
+export type LoginSuccessAction = {
+  type: typeof LOGIN_SUCCESS
+  payload: CurrentUser
+}
+
+export type LoginFailAction = {
+  type: typeof LOGIN_FAIL
+}
+
+export type LogoutAction = {
+  type: typeof LOG_OUT
+}
+
+export type LoginActions =
+  | LoginRequestAction
+  | LoginSuccessAction
+  | LoginFailAction
+  | LogoutAction
+
+export type CurrentUserActions = LoginActions

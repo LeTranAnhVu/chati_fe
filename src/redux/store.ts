@@ -18,6 +18,9 @@ const initState: AppState = {
     users: [],
     messages: [],
   },
+  currentUser: {
+    loginStatus: 'guest',
+  },
 }
 
 export default function makeStore(initialState = initState) {

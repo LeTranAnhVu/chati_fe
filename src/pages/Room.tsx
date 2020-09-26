@@ -1,20 +1,21 @@
 import React, { FC, useEffect } from 'react'
-import { Grid, Paper } from '@material-ui/core'
-import FriendList from '../components/FriendList'
-import ChatPlace from '../components/ChatPlace'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { appendNewMessage, fetchRoom } from '../redux/actions/room'
-import socket from '../services/socket'
+import { joinRoom, socketFactory } from '../services/socket'
+import { loadCurrentUserInfoAsync } from '../redux/actions/currentUser'
+import Loading from '../components/Loading'
+import { AppState } from '../types'
+import ChatBox from '../components/ChatBox'
+import ChatAction from '../components/ChatAction'
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      height: '100vh',
-    },
-    cols: {
       height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
     },
   })
 )
@@ -25,29 +26,42 @@ const Room: FC<Props> = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const { id: roomId } = useParams()
+  const { room } = useSelector<AppState, AppState>((state) => state)
+
+  // load the user from server at the beginning
+  // then save it to store
+  useEffect(() => {
+    dispatch(loadCurrentUserInfoAsync())
+  }, [dispatch])
 
   useEffect(() => {
     // fetch room
     dispatch(fetchRoom(roomId))
   }, [dispatch, roomId])
 
-  socket.on('server-send-message', (data: any) => {
-    dispatch(appendNewMessage(data))
-  })
+  useEffect(() => {
+    const socket = socketFactory.getSocket(true)
+    socket &&
+      socket.on('server-send-message', (data: any) => {
+        dispatch(appendNewMessage(data))
+      })
+  }, [dispatch])
+
+  useEffect(() => {
+    if (room && room.id) {
+      joinRoom(room.id)
+    }
+  }, [room])
+
+  if (!room || !room.id) {
+    return <Loading />
+  }
 
   return (
-    <Grid container className={classes.root}>
-      <Grid item xs={3}>
-        <Paper className={classes.cols}>
-          <FriendList />
-        </Paper>
-      </Grid>
-      <Grid item xs={9}>
-        <div className={classes.cols}>
-          <ChatPlace />
-        </div>
-      </Grid>
-    </Grid>
+    <div className={classes.root}>
+      <ChatBox room={room} />
+      <ChatAction roomId={room.id} />
+    </div>
   )
 }
 
