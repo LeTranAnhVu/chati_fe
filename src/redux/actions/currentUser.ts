@@ -10,6 +10,7 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  DEFAULT_ROOM,
 } from '../../types'
 import localstorageUtils from '../../utils/localstorageUtils'
 import authService from '../../services/auth'
@@ -49,7 +50,7 @@ export const loginWithGoogleAction = (tokenId: string) => async (
     dispatch(loginRequestAction())
     const user = await authService.authByGoogle(tokenId)
     dispatch(loginSuccessAction(user as CurrentUser))
-    history.push('/')
+    history.push(`/rooms/${DEFAULT_ROOM}`)
   } catch (e) {
     dispatch(loginFailAction())
   }
