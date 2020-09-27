@@ -22,7 +22,10 @@ export type RoomActions = ChangeRoomAction | AppendNewMessageAction
 
 export type UserInRoom = {
   id: string
-  name: string
+  lastName?: string
+  firstName: string
+  avatar?: string
+  email: string
 }
 
 export type UserForCommunication = {

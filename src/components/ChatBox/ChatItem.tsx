@@ -43,12 +43,14 @@ const ChatItem: FC<Props> = ({ user, message }) => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
-      <Avatar className={classes.avatar} variant="square" src="#">
-        {user.name.slice(0, 1).toUpperCase()}
+      <Avatar className={classes.avatar} variant="square" src={user.avatar}>
+        {user.firstName.slice(0, 1).toUpperCase()}
       </Avatar>
       <div className={classes.content}>
         <p className={classes.meta}>
-          <span className={classes.userName}>{user.name}</span>
+          <span
+            className={classes.userName}
+          >{`${user.firstName} ${user.lastName}`}</span>
           <span className={classes.date}>
             {moment.default(message.createdAt).fromNow()}
           </span>

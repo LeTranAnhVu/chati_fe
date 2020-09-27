@@ -21,8 +21,11 @@ type Props = {
   room: RoomModel
 }
 
-const defaultUser = {
-  name: 'unknown',
+const defaultUser: UserInRoom = {
+  firstName: 'dummy',
+  lastName: '',
+  email: '',
+  avatar: '',
   id: '00000',
 }
 

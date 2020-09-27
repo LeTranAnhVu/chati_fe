@@ -54,6 +54,7 @@ const FriendList: FC<Props> = () => {
   const handleFetchRoomByUser = async (user: UserForCommunication) => {
     try {
       const room = await roomService.fetchOrCreateByUserId(user.id)
+      console.log('------->', room)
       history.push(`/rooms/${room.id}`)
     } catch (e) {
       console.log('cannot get room')
@@ -87,21 +88,23 @@ const FriendList: FC<Props> = () => {
         </ListSubheader>
       }
     >
-      {users.map((user) => (
-        <ListItem
-          button
-          onClick={() => handleFetchRoomByUser(user)}
-          key={user.id}
-        >
-          <ListItemAvatar>
-            <Avatar src={user.avatar} />
-          </ListItemAvatar>
-          <ListItemText>
-            {user.firstName + ' ' + user.lastName}
-            {currentUser && currentUser.id === user.id && <span> (me)</span>}
-          </ListItemText>
-        </ListItem>
-      ))}
+      {users
+        .filter((user) => user.id !== currentUser.id)
+        .map((user) => (
+          <ListItem
+            button
+            onClick={() => handleFetchRoomByUser(user)}
+            key={user.id}
+          >
+            <ListItemAvatar>
+              <Avatar src={user.avatar} />
+            </ListItemAvatar>
+            <ListItemText>
+              {user.firstName + ' ' + user.lastName}
+              {/*{currentUser && currentUser.id === user.id && <span> (me)</span>}*/}
+            </ListItemText>
+          </ListItem>
+        ))}
     </List>
   )
 }
