@@ -2,11 +2,13 @@ import {
   APPEND_NEW_MESSAGE,
   AppendNewMessageAction,
   CHANGE_ROOM,
+  DEFAULT_ROOM,
   MessageInRoom,
 } from '../../types'
 import { Dispatch } from 'redux'
 
 import roomService from '../../services/room'
+import history from '../../utils/history'
 
 export const appendNewMessage = (
   newMessage: MessageInRoom
@@ -25,6 +27,6 @@ export const fetchRoom = (roomId: string) => async (dispatch: Dispatch) => {
       payload: room,
     })
   } catch (e) {
-    return null
+    history.push(`/rooms/${DEFAULT_ROOM}`)
   }
 }

@@ -1,5 +1,5 @@
 export const ACCESS_TOKEN = 'ACCESS_TOKEN'
-
+export const DEFAULT_ROOM = '000'
 // Action types
 export const ADD_PRODUCT = 'ADD_PRODUCT'
 export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
@@ -22,7 +22,17 @@ export type RoomActions = ChangeRoomAction | AppendNewMessageAction
 
 export type UserInRoom = {
   id: string
-  name: string
+  lastName?: string
+  firstName: string
+  avatar?: string
+  email: string
+}
+
+export type UserForCommunication = {
+  id: string
+  firstName: string
+  lastName: string
+  avatar: string
 }
 export type MessageInRoom = {
   id: string

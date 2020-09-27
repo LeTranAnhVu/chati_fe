@@ -6,7 +6,7 @@ import { appendNewMessage, fetchRoom } from '../redux/actions/room'
 import { joinRoom, socketFactory } from '../services/socket'
 import { loadCurrentUserInfoAsync } from '../redux/actions/currentUser'
 import Loading from '../components/Loading'
-import { AppState } from '../types'
+import { AppState, DEFAULT_ROOM } from '../types'
 import ChatBox from '../components/ChatBox'
 import ChatAction from '../components/ChatAction'
 
@@ -16,6 +16,13 @@ const useStyles = makeStyles(() =>
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+    },
+    defaultRoom: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   })
 )
@@ -35,8 +42,10 @@ const Room: FC<Props> = () => {
   }, [dispatch])
 
   useEffect(() => {
-    // fetch room
-    dispatch(fetchRoom(roomId))
+    if (roomId !== DEFAULT_ROOM) {
+      // fetch room
+      dispatch(fetchRoom(roomId))
+    }
   }, [dispatch, roomId])
 
   useEffect(() => {
@@ -52,6 +61,16 @@ const Room: FC<Props> = () => {
       joinRoom(room.id)
     }
   }, [room])
+
+  if (roomId === DEFAULT_ROOM) {
+    return (
+      <div className={classes.root}>
+        <p className={classes.defaultRoom}>
+          Please select a person on the left side to chat
+        </p>
+      </div>
+    )
+  }
 
   if (!room || !room.id) {
     return <Loading />

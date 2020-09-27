@@ -1,8 +1,15 @@
-import { backendApi } from './index'
+import Resource from './resource'
+import { RoomModel } from '../types'
 
-const resource = 'rooms'
-export default {
-  fetchOne: async (id: string) => {
-    return backendApi.get(`/${resource}/${id}`).then((res) => res.data)
-  },
+class roomService extends Resource<RoomModel> {
+  constructor() {
+    super('rooms')
+  }
+  fetchOrCreateByUserId = async (userId: string): Promise<{ id: string }> => {
+    return this._http
+      .get(`/${this.resource}/users/${userId}`)
+      .then((res) => res.data)
+  }
 }
+
+export default new roomService()
